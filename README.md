@@ -33,6 +33,8 @@ This would work fine, and I've definitely written functions that mutate somethin
 - It accesses variables defined outside it
 - It updates a value and mutates it to be another value
 
+![injected apple](./images/mutated-apple.jpg)
+
 Coming from a math background, I can get behind the idea that a function, given an argument should always return the same result.
 This function is literally always going to return a different result, so it's not very dependable. But with closures we are still going to end up being able to update it, it's a crafty way to have a functional function that returns different results.
 
