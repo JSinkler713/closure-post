@@ -4,6 +4,7 @@ slug: ts-function-returns
 author: James Sinkler
 meta: 'Two different returns on a typescript function. Handling the case when you get errors like: Not all constituents of type number | () = {} are callable.'
 image: ./images/dual-drinks.jpg
+tags: typescript
 ---
 
 ![two drinks poured at the same time in mirror](./images/dual-drinks.jpg)
@@ -17,17 +18,147 @@ The beauty of typescript is supposed to be safety. But safety is hard to achieve
 This is good. It will make you write a bit more code to explain yourself to typescript.
 
 
+### Task:
+
+Let's say you want to write a function that can take 2 arguments, and return an array between those two values.
+
+### EX:
+```typescript
+range(3, 5) // returns [3, 4, 5]
+```
+So far this is not too dificult with typescript. Let's make a little for loop to do it.
 
 ```typescript
-let score = 0;
-
-const playerScores = ()=> {
-  score++
-  return score
+function range(start: number, end: number): number[] {
+  let newArr: number[] = [start]
+  for (let i=start+1; i<= newEnd; i++) {
+    newArr.push(i)
+  }
+  return newArr
 }
 ```
 
-Hope you found that enjoyable, maybe you will find a usecase for this somewhere soon.
+To break it down this is a function which has takes two `arguments`, and we are using typescript to assert these are both of the type number.
+
+The next piece, `): number[] {` is asserting out return value will be an array of numbers. So nothing too crazy yet.
+
+## Harder part
+
+The next part is to implement this function when we only pass in 1 argument. We want it to start the process, but instead return a `function` that will then take in an argument as the ending number, and return the completed array.
+
+Our returned callback function signature for when we pass in 1 argument
+```typescript
+type CallBackFunction = (end: number) => number[]
+```
+
+So let's modify `range`
+
+```typescript
+type CallBackFunction = (end: number) => number[]
+
+function range(start: number, end?: number): number[] | CallBackFunction  {
+  let newArr: number[] = [start]
+  function callback (endingNum:number): number[] {
+    for (let i=start+1; i<= endingNum; i++) {
+      newArr.push(i)
+    }
+    return newArr
+  }
+  // if end is undefined we need to return the callback
+  if ( end === undefined) {
+    return callback
+  }
+  return callback(end) // this returns a full array [start, start+1, ..., end]
+}
+
+const fromThreeToFive = range(3, 5)
+console.log(fromThreeToFive)
+const startAtFour = range(4)
+```
+
+We made the end parameter  optional. So we changed the start of our function to be `range(start: number, end?:number) {`.
+
+
+Our function still works for a range with two arguments, but if we try `startAtFour = range(4)` it doesn't give us an error or warning, but if we hover over it we can see it doesn't know what it is.
+
+```typescript
+const startAtFour: number[] | CallBackFunction
+```
+
+This immediately becomes problematic when we try to call this function with an ending argument.
+
+```typescript
+const startAtFour = range(4)
+const endedAt9 = startAtFour(9) // should return [4, 5, 6, 7, 8, 9]
+```
+
+## What do you want typescript?
+
+Not all constituents of type 'CallBackFunction | number[]' are callable.
+
+In other words you can't invoke  an array of numbers like this `[4](9)`.
+
+## Quick Solution with `as`
+
+Since we are smart, we know when we write this code, we are expecting a callback function if we only pass in one argument. Thus the quick and easy fix is to tell it what startAtFour is.
+
+```typescript
+// using the as, we can assert this is going to have a certain type
+const startAtFour = range(4) as CallBackFunction
+```
+
+We can now use it as we wish, and it will expect startAtFour to have the type CallBackFunction moving forward. This was my initial fix before I read a good <a href='https://dev.to/llldar/typescript-function-return-type-based-on-parameters-87d'>article</a> from <a href='https://dev.to/llldar' target='_blank'>Nathaniel</a>. Which led to this other solution.
+
+Solution 2 Function overload
+
+```typescript
+type callBackFunc = (end: number) => number[]
+function range2 (start: number, end: number) : number[];
+function range2 (start: number): callBackFunc;
+
+function range2(start:number, end?:number) {
+  let newArr = [start]
+
+  function endFunction(newEnd: number) {
+    for (let i=start+1; i<= newEnd; i++) {
+      newArr.push(i)
+    }
+    return newArr
+  }
+  if (end === undefined) {
+    return endFunction  // endFunction with newArr = [start]
+  } else {
+    return endFunction(end) // ex: [1, 2, 3]
+  }
+}
+
+const startAtFour = range2(4)
+const endedAtNine = startAtFour(9)
+console.log(endedAtNine)
+```
+
+When we define range2 after our Typescript definitions, it goes and looks at what we wrote about range2 earlier.
+
+```typescript
+function range2 (start: number, end: number) : number[]
+```
+
+Now it will know that when it gets in two arguments that are both numbers, it is going to return an array of numbers.
+
+
+```typescript
+function range2 (start: number): callBackFunc;
+```
+
+Now it will know that when it does not get another argument it is going to return a function.
+
+
+### Quick note -- end?= --
+
+It is key that we allow the second argument to still be optional when we define the function, to allow it to match the above type signature. Otherwise it will error out, but `end?= number` allows it to be `number` or `undefined` when we don't pass it in.
+
+
+Thanks for reading, maybe you will find a usecase for this somewhere soon. If you are interested in how we have access the that array with the starting number in our callback function, check out my other post on <a href='https://dev.to/jsinkler713/closure-37je'>`closure`</a>
 
 Happy Coding,
 
