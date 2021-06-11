@@ -94,7 +94,7 @@ const endedAt9 = startAtFour(9) // should return [4, 5, 6, 7, 8, 9]
 
 ## What do you want typescript?
 
-Not all constituents of type 'CallBackFunction | number[]' are callable.
+<strong>Not all constituents of type 'CallBackFunction | number[]' are callable.</strong>
 
 In other words you can't invoke  an array of numbers like this `[4](9)`.
 
@@ -157,6 +157,7 @@ Now it will know that when it does not get another argument it is going to retur
 
 It is key that we allow the second argument to still be optional when we define the function, to allow it to match the above type signature. Otherwise it will error out, but `end?= number` allows it to be `number` or `undefined` when we don't pass it in.
 
+A <a href='https://www.typescriptlang.org/play?#code/PTDKHsBsFcBcEtwDsAEBGAsAKAGbSQMYLIoBOAhkgOYCmAFAM6zmmwBcS0AtgEY2kAaFDSQATAPwdufUgEoUAb2woUkGrBRIaAdwCCpUigC8KANpMWsALrKUeQsVQjRAMXxFESOlu0BRMWya0vzySlgqKjjghnRqGvBGFqwA1GgA3CjwADwmPv6iGfDJyaG2EZo6+qQAdAAO0AwAFnTwsmUoAL7tpOrQpKg+VbZd4Zk4KHTOxkYm+KI0OPBaoqWjKj2wfU5ibg6eKiDCO+6OKNrwsI0VegbGZknWw8KQDDSK3b39R64nnpNi8kONAAHoFTGghAAmIQAZhsoxGI2whyo8AAbiIULBtOAUCwqAwyJ9UJQ8QZyABPFDgcacXj8BjYOLUrR3CjUegwgQwwHAMxwpnqLE4tmUWgTLkoAAcvP5QgALEIAKxCABsQgA7EIpfDDgBrGhUnGkUQoADk5AYZqEsFIVOYeqWVEyGhpOGqHuwBGQTBQD10sBhoo5dB5eMJBHIkEgACFyAQ9bsCIKNJcejQACrgFzot4mf2BuhK2WmSWKlBK+HepAMKA0aqQcBUOhpmiZ7O5tpYbA9rCHCAwU6Q7CwCm1N6R6NxhNJu7-USBOkyeRGAB8QXppFM8PsHhI7NokImD0XwUE31Pm-kl5k27S2F3pwPNCPjGYrBvIUCk9j8cT7nvbtcF+fcxRfN9LCkTchGcSQlxCd5RmZQZbhMcx30eIDIhA7Yfj2ZBvB0fJPzkRDyiiGJmQSB5UkKHJrnyQpilWcoVBQmp6iaFou3KEZyg2LZriGBFbHgcZ52mWYxAWJYaBWMiIgEr5nCTU4UCBY58NQc5LiE1D7gw+EVA6Z5XgU9ZiW+VS-mcWUQTBCEUGhFABRErAkSwatfQLFxwD6YNDzoeUuy8jRnDkgMADlZLuHy-NIOgAE55C9H06wbJt5wi2Boq0WQgA' target='_blank'>link</a> to the TS Playground with the two solutions.
 
 Thanks for reading, maybe you will find a usecase for this somewhere soon. If you are interested in how we have access the that array with the starting number in our callback function, check out my other post on <a href='https://dev.to/jsinkler713/closure-37je'>`closure`</a>
 
