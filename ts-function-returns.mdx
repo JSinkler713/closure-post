@@ -1,0 +1,35 @@
+---
+title: TS-Function-Returns
+slug: ts-function-returns
+author: James Sinkler
+meta: 'Two different returns on a typescript function. Handling the case when you get errors like: Not all constituents of type number | () = {} are callable.'
+image: ./images/dual-drinks.jpg
+---
+
+![two drinks poured at the same time in mirror](./images/dual-drinks.jpg)
+<em>Is it one drink or two?</em><br/>
+<span>Photo by <a href="https://unsplash.com/@nate_dumlao?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nathan Dumlao</a> on <a href="https://unsplash.com/s/photos/two-different?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></span>
+
+## Return two different types w/ typescript function
+
+The beauty of typescript is supposed to be safety. But safety is hard to achieve and at some point typescript may not let you do something that you can tell will work.
+
+This is good. It will make you right a bit more code to explain yourself to typescript.
+
+
+
+```typescript
+let score = 0;
+
+const playerScores = ()=> {
+  score++
+  return score
+}
+```
+
+Hope you found that enjoyable, maybe you will find a usecase for this somewhere soon.
+
+Happy Coding,
+
+James
+
